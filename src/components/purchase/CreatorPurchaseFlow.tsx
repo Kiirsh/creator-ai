@@ -37,20 +37,29 @@ export default function CreatorPurchaseFlow({
   videoPlans,
 }: Props) {
   const [step, setStep] = React.useState<1 | 2>(1);
-  const [format, setFormat] = React.useState<"video">("video");
-
-  // VIDEO
-  const [selectedRateId, setSelectedRateId] = React.useState<string | null>(null);
+  const [selectedRateId, setSelectedRateId] = React.useState<string | null>(
+    videoPlans[0]?.rateId ?? null
+  );
 
   // TERMS / UX
   const [termsAccepted, setTermsAccepted] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [err, setErr] = React.useState<string | null>(null);
 
-  const canContinueStep2 = format === "video" && !!selectedRateId;
+  const selectedPlan = React.useMemo(
+    () => videoPlans.find((p) => p.rateId === selectedRateId) || null,
+    [videoPlans, selectedRateId]
+  );
+
+  const canContinueStep2 = !!selectedPlan;
 
   async function handleCheckout() {
     setErr(null);
+
+    if (!selectedPlan) {
+      setErr("Please choose a video rate to continue.");
+      return;
+    }
 
     if (!termsAccepted) {
       setErr("Please accept the purchase terms.");
@@ -66,24 +75,25 @@ export default function CreatorPurchaseFlow({
         body: JSON.stringify({
           creatorId: creator.id,
           rateId: selectedRateId,
-          termsAccepted: true,
+          termsAccepted,
           addons: { usage_cents: 0, creator_post_cents: 0 },
         }),
       });
       const json = await res.json();
       if (!res.ok || !json?.url) throw new Error(json?.error || "Checkout failed");
       window.location.href = json.url;
-    } catch (e: any) {
-      setErr(e?.message || "Something went wrong");
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Something went wrong";
+      setErr(message);
       setLoading(false);
     }
   }
 
   return (
     <div className="w-full">
-          {/* Header */}
-          <div className="flex items-center gap-3 mb-6">
-            <img
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-6">
+        <img
           src={creator.avatarUrl || "/demo/creator.jpg"}
           alt=""
           className="h-10 w-10 rounded-full border border-white/10 object-cover"
@@ -121,9 +131,15 @@ export default function CreatorPurchaseFlow({
                       onClick={() => setSelectedRateId(p.rateId)}
                     >
                       <div className="flex items-center justify-between">
-                        <div className="font-medium">{p.label}</div>
-                        <div className="text-white/80">
-                          {formatMoney(p.price_cents, p.currency)}
+                        <div>
+                          <div className="font-medium">{p.label}</div>
+                          <p className="text-xs text-white/60 mt-1">Creator fulfills a custom video.</p>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-white/80">
+                            {formatMoney(p.price_cents, p.currency)}
+                          </div>
+                          <div className="text-[11px] text-white/50">includes creator payment</div>
                         </div>
                       </div>
                     </button>
@@ -131,12 +147,12 @@ export default function CreatorPurchaseFlow({
                 )}
               </div>
 
-                <div className="flex justify-between mt-6">
-                  <div />
-                  <Button disabled={!canContinueStep2} onClick={() => setStep(2)}>
-                    Continue →
-                  </Button>
-                </div>
+              <div className="flex items-center justify-between mt-6 text-sm text-white/60">
+                <span>Secure checkout via Stripe in the next step.</span>
+                <Button disabled={!canContinueStep2} onClick={() => setStep(2)}>
+                  Continue →
+                </Button>
+              </div>
             </motion.div>
           )}
 
@@ -148,13 +164,28 @@ export default function CreatorPurchaseFlow({
               </CardHeader>
 
               <div className="space-y-2 text-white/80">
-                <p>
-                  <strong>Format:</strong> Video
-                </p>
-                <p>
-                  <strong>Rate:</strong>{" "}
-                  {videoPlans.find((p) => p.rateId === selectedRateId)?.label ?? "—"}
-                </p>
+                <div className="flex items-center justify-between rounded-lg bg-black/30 border border-white/10 p-3">
+                  <div>
+                    <p className="text-sm text-white/60">Format</p>
+                    <p className="font-semibold">Video</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-white/60">Selected rate</p>
+                    <p className="font-semibold">{selectedPlan?.label ?? "—"}</p>
+                  </div>
+                </div>
+
+                <div className="rounded-lg bg-black/40 border border-white/10 p-3">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-white/70">Video rate</span>
+                    <span className="font-medium">
+                      {selectedPlan ? formatMoney(selectedPlan.price_cents, selectedPlan.currency) : "—"}
+                    </span>
+                  </div>
+                  <div className="mt-2 text-xs text-white/60">
+                    Payment is handled by Stripe; we never see your card details.
+                  </div>
+                </div>
               </div>
 
               <div className="rounded-lg bg-black/30 border border-white/10 p-3 mt-4">
@@ -183,7 +214,7 @@ export default function CreatorPurchaseFlow({
               {err && <p className="text-sm text-red-400 mt-2">{err}</p>}
 
               <div className="flex justify-between mt-6">
-                <Button variant="ghost" onClick={() => setStep(2)}>
+                <Button variant="ghost" onClick={() => setStep(1)}>
                   ← Back
                 </Button>
                 <Button
@@ -191,7 +222,7 @@ export default function CreatorPurchaseFlow({
                   disabled={
                     loading ||
                     !termsAccepted ||
-                    (format === "video" && !selectedRateId)
+                    !selectedPlan
                   }
                   onClick={handleCheckout}
                 >
