@@ -35,13 +35,6 @@ export default async function PurchasePage({
       currency: (r.currency as string | null)?.toLowerCase() || "gbp",
     })) ?? [];
 
-  // Audio per-character price
-  const { data: pricing } = await supabase
-    .from("creators")
-    .select("audio_char_rate_cents")
-    .eq("id", creatorId)
-    .maybeSingle<{ audio_char_rate_cents: number | null }>();
-
   return (
     <main className="mx-auto max-w-3xl px-4 py-8">
       <CreatorPurchaseFlow
@@ -51,7 +44,6 @@ export default async function PurchasePage({
           avatarUrl: creatorRow.avatar_url || undefined,
         }}
         videoPlans={videoPlans}
-        audioPricePerCharCents={pricing?.audio_char_rate_cents ?? null}
       />
     </main>
   );

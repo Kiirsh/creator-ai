@@ -87,16 +87,7 @@ export default async function Page({
         currency: string | null;
       }[] = (rates as any) || [];
 
-  // 3) AI audio per-character rate (GBP cents) — from creators table
-  const { data: audioRow } = await supabase
-    .from("creators")
-    .select("audio_char_rate_cents")
-    .eq("id", creator.id)
-    .maybeSingle<{ audio_char_rate_cents: number | null }>();
-
-  const audioRateCents = audioRow?.audio_char_rate_cents ?? null;
-
-  // 4) No-nos
+  // 3) No-nos
   const { data: nn } = await supabase
     .from("creator_no_nos")
     .select("tag")
@@ -106,14 +97,6 @@ export default async function Page({
 
   const formatFollowers = (n?: number | null) =>
     typeof n === "number" ? new Intl.NumberFormat().format(n) : null;
-
-  const fmtPerChar = (cents: number | null) =>
-    cents == null
-      ? null
-      : new Intl.NumberFormat(undefined, {
-          style: "currency",
-          currency: "GBP",
-        }).format(cents / 100) + " / char";
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-8 space-y-6">
@@ -165,28 +148,6 @@ export default async function Page({
             </div>
           </div>
 
-          {/* AI Audio card */}
-          <div className="rounded-xl border border-white/10 p-4 bg-black/20">
-            <div className="font-semibold">AI Audio</div>
-            <p className="text-sm text-white/70 mt-1">
-              Order a voice-over in the creator’s cloned voice (via ElevenLabs). Paste a script and we’ll generate a high-quality MP3.
-            </p>
-            {audioRateCents != null ? (
-              <p className="text-xs text-white/60 mt-2">
-                From <span className="text-white/80">{fmtPerChar(audioRateCents)}</span>
-              </p>
-            ) : (
-              <p className="text-xs text-white/60 mt-2">Pricing not set yet.</p>
-            )}
-            <div className="mt-3 flex justify-end">
-              <Link
-                href={`/creator/${creator.id}/purchase?format=audio`}
-                className="rounded-full border px-4 py-2 transition hover:bg-white hover:text-black"
-              >
-                Choose AI Audio
-              </Link>
-            </div>
-          </div>
         </div>
       </section>
 

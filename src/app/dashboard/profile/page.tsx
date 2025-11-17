@@ -45,9 +45,6 @@ type CreatorRow = {
   brand_usage_cents: number | null;
   post_tiktok_cents: number | null;
 
-  // AI audio per-character price (GBP, stored as cents)
-  audio_char_rate_cents: number | null;
-
   // connect
   stripe_account_id?: string | null;
 };
@@ -68,7 +65,6 @@ type CreatorSelect = Pick<
   | "sora2_followers"
   | "brand_usage_cents"
   | "post_tiktok_cents"
-  | "audio_char_rate_cents"
   | "stripe_account_id"
 >;
 
@@ -111,14 +107,14 @@ export default function ProfileSettingsPage() {
       setProfile(prof);
 
       if (prof?.role === "creator") {
-        // creators: details + socials + connect + add-on + audio fields here
+        // creators: details + socials + connect + add-on fields here
         const { data: c, error: cErr } = await supabase
           .from("creators")
           .select(
             "id, headline, base_rate_cents, " +
               "instagram_handle, instagram_followers, youtube_handle, youtube_followers, " +
               "tiktok_handle, tiktok_followers, sora2_handle, sora2_followers, " +
-              "brand_usage_cents, post_tiktok_cents, audio_char_rate_cents, " +
+              "brand_usage_cents, post_tiktok_cents, " +
               "stripe_account_id"
           )
           .eq("id", user.id)
@@ -145,7 +141,6 @@ export default function ProfileSettingsPage() {
           sora2_followers: c?.sora2_followers ?? 0,
           brand_usage_cents: c?.brand_usage_cents ?? null,
           post_tiktok_cents: c?.post_tiktok_cents ?? null,
-          audio_char_rate_cents: c?.audio_char_rate_cents ?? null,
           stripe_account_id: c?.stripe_account_id ?? null,
         };
         setCreator(row);
@@ -240,7 +235,7 @@ export default function ProfileSettingsPage() {
       return;
     }
 
-    // Save creator details + socials + add-on + audio prices
+    // Save creator details + socials + add-on prices
     if (creator) {
       const {
         headline,
@@ -255,7 +250,6 @@ export default function ProfileSettingsPage() {
         sora2_followers,
         brand_usage_cents,
         post_tiktok_cents,
-        audio_char_rate_cents,
       } = creator;
 
       const { error: cErr } = await supabase
@@ -273,7 +267,6 @@ export default function ProfileSettingsPage() {
           sora2_followers: sora2_followers ?? 0,
           brand_usage_cents: brand_usage_cents ?? null,
           post_tiktok_cents: post_tiktok_cents ?? null,
-          audio_char_rate_cents: audio_char_rate_cents ?? null,
         })
         .eq("id", me.id);
 
@@ -476,34 +469,6 @@ export default function ProfileSettingsPage() {
                   />
                 </div>
 
-                {/* NEW: AI Audio price (per character, GBP) */}
-                <div>
-                  <label className="text-sm">AI Audio price (per character, GBP)</label>
-                  <Input
-                    type="number"
-                    min={0}
-                    step="0.01"
-                    value={
-                      creator?.audio_char_rate_cents == null
-                        ? ""
-                        : (creator.audio_char_rate_cents || 0) / 100
-                    }
-                    onChange={(e) => {
-                      const pounds = Number(e.target.value);
-                      setCreator((c) =>
-                        c
-                          ? {
-                              ...c,
-                              audio_char_rate_cents: isNaN(pounds)
-                                ? null
-                                : Math.max(0, Math.round(pounds * 100)),
-                            }
-                          : c
-                      );
-                    }}
-                    placeholder="e.g. 0.05 (i.e. 5p per char)"
-                  />
-                </div>
               </>
             )}
 
