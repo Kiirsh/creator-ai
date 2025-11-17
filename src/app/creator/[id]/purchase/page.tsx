@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import CreatorPurchaseFlow from "@/components/purchase/CreatorPurchaseFlow";
+import { isAudioLikeLabel } from "@/lib/rates";
 import { notFound } from "next/navigation";
 
 export const revalidate = 60;
@@ -29,7 +30,7 @@ export default async function PurchasePage({
 
   const videoPlans =
     (rates || [])
-      .filter((r) => !String(r.label || "").toLowerCase().includes("audio"))
+      .filter((r) => !isAudioLikeLabel(r.label))
       .map((r) => ({
         rateId: r.id as string,
         label: (r.label as string) || "Custom video",

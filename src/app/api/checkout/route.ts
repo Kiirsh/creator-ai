@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import { isAudioLikeLabel } from "@/lib/rates";
 
 /**
  * POST /api/checkout
@@ -31,7 +32,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid rate" }, { status: 400 });
     }
 
-    if (String(rate.label || "").toLowerCase().includes("audio")) {
+    if (isAudioLikeLabel(rate.label)) {
       return NextResponse.json({ error: "Audio purchases are not available" }, { status: 400 });
     }
 

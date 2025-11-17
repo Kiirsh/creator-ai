@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import type Stripe from "stripe";
+import { isAudioLikeLabel } from "@/lib/rates";
 
 export const runtime = "nodejs";
 
@@ -41,8 +42,7 @@ export async function POST(req: Request) {
     }
 
     // Audio bookings are disabled; block any audio-tagged rates
-    const rateLabel = String(rate.label || "").toLowerCase();
-    if (rateLabel.includes("audio")) {
+    if (isAudioLikeLabel(rate.label)) {
       return NextResponse.json({ error: "Audio purchases are not available" }, { status: 400 });
     }
 
