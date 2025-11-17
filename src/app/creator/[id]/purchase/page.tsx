@@ -28,12 +28,14 @@ export default async function PurchasePage({
     .order("price_cents", { ascending: true });
 
   const videoPlans =
-    (rates || []).map((r) => ({
-      rateId: r.id as string,
-      label: (r.label as string) || "Custom video",
-      price_cents: Number(r.price_cents || 0),
-      currency: (r.currency as string | null)?.toLowerCase() || "gbp",
-    })) ?? [];
+    (rates || [])
+      .filter((r) => !String(r.label || "").toLowerCase().includes("audio"))
+      .map((r) => ({
+        rateId: r.id as string,
+        label: (r.label as string) || "Custom video",
+        price_cents: Number(r.price_cents || 0),
+        currency: (r.currency as string | null)?.toLowerCase() || "gbp",
+      })) ?? [];
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-8">

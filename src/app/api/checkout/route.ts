@@ -31,6 +31,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid rate" }, { status: 400 });
     }
 
+    if (String(rate.label || "").toLowerCase().includes("audio")) {
+      return NextResponse.json({ error: "Audio purchases are not available" }, { status: 400 });
+    }
+
     // 2) Create a pending order row
     const { data: orderRow, error: orderErr } = await supabaseAdmin
       .from("orders")

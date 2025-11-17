@@ -40,6 +40,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Rate not found for this creator" }, { status: 404 });
     }
 
+    // Audio bookings are disabled; block any audio-tagged rates
+    const rateLabel = String(rate.label || "").toLowerCase();
+    if (rateLabel.includes("audio")) {
+      return NextResponse.json({ error: "Audio purchases are not available" }, { status: 400 });
+    }
+
     // 2) Creator must be onboarded + authoritative add-on prices
     const { data: creator, error: creatorErr } = await supabaseAdmin
       .from("creators")
