@@ -325,31 +325,35 @@ export default function ProfileSettingsPage() {
   if (!profile) {
     return (
     <main className="space-y-6">
-      <div className="section-shell p-6 md:p-7 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div className="space-y-1">
-          <p className="text-sm text-muted-foreground">Creator workspace</p>
-          <h1 className="text-3xl font-semibold text-slate-900">Profile &amp; pricing</h1>
-          <p className="text-sm text-muted-foreground">
-            Keep your video offer up to date so brands know exactly what they’re booking.
-          </p>
+      <section className="page-hero">
+        <div className="page-hero-content">
+          <div className="space-y-2">
+            <span className="surface-kicker">Creator workspace</span>
+            <h1 className="text-3xl md:text-4xl font-semibold text-slate-900">Profile &amp; pricing</h1>
+            <p className="text-sm text-muted-foreground max-w-2xl">
+              Keep your video offer up to date so brands know exactly what brands are booking.
+            </p>
+            <div className="flex flex-wrap items-center gap-3">
+              {isCreator && (
+                <span className="pill bg-secondary text-secondary-foreground">
+                  <CheckCircle2 className="h-4 w-4 text-primary" />
+                  Video-first profile
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <Button
+              type="submit"
+              form="profile-form"
+              disabled={saving}
+              className="shadow-sm"
+            >
+              {saving ? "Saving…" : "Save changes"}
+            </Button>
+          </div>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
-          {isCreator && (
-            <span className="pill">
-              <CheckCircle2 className="h-4 w-4 text-primary" />
-              Video-first profile
-            </span>
-          )}
-          <Button
-            type="submit"
-            form="profile-form"
-            disabled={saving}
-            className="shadow-sm"
-          >
-            {saving ? "Saving…" : "Save changes"}
-          </Button>
-        </div>
-      </div>
+      </section>
 
       <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
         {/* LEFT: editor */}

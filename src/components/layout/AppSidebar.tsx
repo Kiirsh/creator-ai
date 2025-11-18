@@ -19,11 +19,12 @@ export default function AppSidebar() {
 
   return (
     <aside className="hidden lg:block w-64 shrink-0 border-r bg-sidebar px-4 py-6 text-sidebar-foreground">
-      <div className="space-y-6">
-        <div className="px-2">
+      <div className="rounded-2xl border bg-gradient-to-b from-white/80 via-secondary/20 to-white/70 p-4 shadow-sm">
+        <div className="px-1">
           <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">Navigation</p>
+          <p className="text-sm text-muted-foreground mt-1">Quick access to your workspace</p>
         </div>
-        <nav className="space-y-2">
+        <nav className="mt-4 space-y-2">
           {links.map((link) => {
             const Icon = link.icon;
             const active = pathname === link.href || pathname.startsWith(`${link.href}/`);

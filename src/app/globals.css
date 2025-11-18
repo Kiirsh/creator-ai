@@ -45,8 +45,8 @@
 
 :root {
   /* Core palette */
-  --radius: 0.75rem;
-  --background: #f6f7fb;
+  --radius: 0.9rem;
+  --background: #f4f6fb;
   --foreground: #0f172a;
   --card: #ffffff;
   --card-foreground: #0f172a;
@@ -54,11 +54,11 @@
   --popover-foreground: #0f172a;
   --primary: #4f46e5;
   --primary-foreground: #f8fafc;
-  --secondary: #e0e7ff;
-  --secondary-foreground: #1e1b4b;
+  --secondary: #dfe6ff;
+  --secondary-foreground: #312e81;
   --muted: #eef2f7;
   --muted-foreground: #475569;
-  --accent: #dbeafe;
+  --accent: #e0f2fe;
   --accent-foreground: #0f172a;
   --destructive: #ef4444;
   --border: #e2e8f0;
@@ -80,10 +80,11 @@
 
   /* Gradients and elevation */
   --surface: radial-gradient(circle at 20% 20%, #eef2ff, transparent 35%),
-    radial-gradient(circle at 80% 0%, #e0f2fe, transparent 25%),
-    #f6f7fb;
-  --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.08);
-  --shadow-strong: 0 25px 60px rgba(15, 23, 42, 0.12);
+    radial-gradient(circle at 80% 0%, #d7e9ff, transparent 25%),
+    radial-gradient(circle at 10% 90%, #e0f2fe, transparent 20%),
+    #f4f6fb;
+  --shadow-soft: 0 12px 32px rgba(15, 23, 42, 0.08);
+  --shadow-strong: 0 28px 65px rgba(15, 23, 42, 0.12);
 }
 
 .dark {
@@ -131,7 +132,9 @@
   }
   body {
     @apply bg-background text-foreground antialiased font-sans;
-    background: var(--surface);
+    background: radial-gradient(circle at 15% 20%, rgba(79, 70, 229, 0.08), transparent 22%),
+      radial-gradient(circle at 85% 10%, rgba(34, 211, 238, 0.08), transparent 18%),
+      var(--surface);
   }
   h1 {
     @apply text-3xl md:text-4xl font-semibold tracking-tight text-slate-900;
@@ -146,7 +149,7 @@
     @apply text-base text-slate-700;
   }
   a {
-    @apply text-primary;
+    @apply text-primary underline-offset-4 transition hover:text-primary/90;
   }
   ::selection {
     background: color-mix(in srgb, var(--primary) 20%, transparent);
@@ -189,4 +192,34 @@
 
 .focus-ring {
   @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary/50 focus-visible:ring-offset-background;
+}
+
+.page-hero {
+  @apply relative overflow-hidden rounded-3xl border bg-white shadow-sm;
+}
+
+.page-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(79, 70, 229, 0.08), transparent 35%),
+    radial-gradient(circle at 80% 0%, rgba(34, 211, 238, 0.08), transparent 28%),
+    radial-gradient(circle at 100% 80%, rgba(168, 85, 247, 0.06), transparent 35%);
+  pointer-events: none;
+}
+
+.page-hero-content {
+  @apply relative grid gap-6 p-6 md:grid-cols-[1.1fr_0.9fr] md:p-8;
+}
+
+.card-stack {
+  @apply grid gap-4 md:grid-cols-2;
+}
+
+.surface-kicker {
+  @apply inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-primary;
+}
+
+.info-grid {
+  @apply grid gap-3 sm:grid-cols-2;
 }
