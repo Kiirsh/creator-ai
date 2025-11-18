@@ -73,15 +73,15 @@ export default function EarningsPage() {
         <Stat title="Your take-home" value={money(totals.net)} />
       </div>
 
-      <div className="rounded-2xl border border-white/10 bg-[radial-gradient(circle_at_15%_20%,rgba(255,255,255,0.05),transparent_32%),radial-gradient(circle_at_85%_0%,rgba(79,70,229,0.12),transparent_30%),#0f172a] p-4 shadow-[0_14px_38px_rgba(15,23,42,0.35)]">
+      <div className="dark-card rounded-2xl p-4">
         <h2 className="text-lg font-semibold mb-3 text-white">Paid orders</h2>
         {loading ? (
-          <div className="text-slate-100/80 text-sm">Loading…</div>
+          <div className="text-slate-100 text-sm">Loading…</div>
         ) : rows.length === 0 ? (
-          <div className="text-slate-100/80 text-sm">No paid orders yet.</div>
+          <div className="text-slate-50 text-sm">No paid orders yet.</div>
         ) : (
           <table className="w-full text-sm">
-            <thead className="text-slate-200/80">
+            <thead className="text-slate-100/90">
               <tr>
                 <th className="text-left py-2">Date</th>
                 <th className="text-left py-2">Rate</th>
@@ -112,8 +112,8 @@ export default function EarningsPage() {
 
 function Stat({ title, value }: { title: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-[radial-gradient(circle_at_15%_20%,rgba(255,255,255,0.05),transparent_32%),radial-gradient(circle_at_85%_0%,rgba(79,70,229,0.12),transparent_30%),#0f172a] p-4 shadow-[0_14px_38px_rgba(15,23,42,0.35)]">
-      <div className="text-slate-200/80 text-sm">{title}</div>
+    <div className="dark-card rounded-2xl p-4">
+      <div className="text-slate-100/90 text-sm">{title}</div>
       <div className="text-xl font-semibold text-white">{value}</div>
     </div>
   );

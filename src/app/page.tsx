@@ -24,7 +24,7 @@ export default async function Page() {
         <div className="absolute inset-x-0 -top-1 h-2 bg-brand-gradient" />
         <div className="absolute inset-0 bg-radial-glow pointer-events-none" />
 
-        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight text-slate-50 drop-shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
+        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
           <span className="text-brand-gradient">AI avatars</span> of your favourite stars
         </h1>
 

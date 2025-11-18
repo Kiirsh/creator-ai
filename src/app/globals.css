@@ -212,6 +212,15 @@
   @apply relative grid gap-6 p-6 md:grid-cols-[1.1fr_0.9fr] md:p-8;
 }
 
+.dark-card {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background:
+    radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.04), transparent 32%),
+    radial-gradient(circle at 90% 10%, rgba(79, 70, 229, 0.14), transparent 28%),
+    linear-gradient(145deg, #0e1424, #0b1020 55%, #0a0f1d);
+  box-shadow: 0 18px 48px rgba(5, 10, 20, 0.38);
+}
+
 .card-stack {
   @apply grid gap-4 md:grid-cols-2;
 }

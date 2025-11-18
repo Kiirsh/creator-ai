@@ -52,11 +52,11 @@ function SocialRow({
 }) {
   if (!handle) return null;
   return (
-    <div className="flex items-center gap-2 text-xs text-white/80">
+    <div className="flex items-center gap-2 text-xs text-white/90">
       <span className="shrink-0">{icon}</span>
       <span className="truncate">{handle}</span>
       {typeof followers === "number" && followers > 0 && (
-        <span className="text-white/50">· {followers.toLocaleString()}</span>
+        <span className="text-white/70">· {followers.toLocaleString()}</span>
       )}
     </div>
   );
@@ -91,7 +91,7 @@ export default function CreatorCard(props: CreatorCardProps) {
   return (
     <Link
       href={href}
-      className="block rounded-2xl border border-white/10 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.05),transparent_35%),radial-gradient(circle_at_85%_15%,rgba(79,70,229,0.12),transparent_32%),#0f172a] hover:border-primary/40 shadow-[0_16px_40px_rgba(15,23,42,0.35)] hover:shadow-[0_20px_55px_rgba(79,70,229,0.28)] transition-colors transition-shadow p-4"
+      className="block rounded-2xl dark-card hover:border-primary/50 hover:shadow-[0_22px_60px_rgba(79,70,229,0.32)] transition-colors transition-shadow p-4"
     >
       {/* Top: avatar + name */}
       <div className="flex items-center gap-3">
@@ -118,7 +118,7 @@ export default function CreatorCard(props: CreatorCardProps) {
           From {money(baseRateCents || 0)}
         </div>
         {typeof followers === "number" && followers > 0 && (
-          <div className="text-slate-300/90">{followers.toLocaleString()} followers</div>
+          <div className="text-slate-100/80">{followers.toLocaleString()} followers</div>
         )}
       </div>
 
@@ -161,7 +161,7 @@ export default function CreatorCard(props: CreatorCardProps) {
           {categories.slice(0, 3).map((cat) => (
             <span
               key={cat}
-              className="text-[11px] rounded-full border border-white/15 px-2 py-0.5 text-slate-100"
+              className="text-[11px] rounded-full border border-white/20 px-2 py-0.5 text-slate-50"
             >
               #{cat}
             </span>
@@ -172,14 +172,14 @@ export default function CreatorCard(props: CreatorCardProps) {
       {/* No-nos */}
       {noNos && noNos.length > 0 && (
         <div className="mt-3 flex items-start gap-2">
-          <span className="shrink-0 text-[10px] uppercase tracking-wide text-slate-200/80 pt-1">
+          <span className="shrink-0 text-[10px] uppercase tracking-wide text-slate-50 pt-1">
             No-nos
           </span>
           <div className="flex flex-wrap gap-1.5">
             {noNos.slice(0, 4).map((tag) => (
               <span
                 key={tag}
-                className="text-[11px] rounded-full bg-white/10 border border-white/20 px-2 py-0.5 text-slate-100"
+                className="text-[11px] rounded-full bg-white/10 border border-white/25 px-2 py-0.5 text-slate-50"
               >
                 {tag}
               </span>
