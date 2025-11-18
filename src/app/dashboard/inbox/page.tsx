@@ -52,24 +52,27 @@ export default function InboxPage() {
       <h1 className="text-2xl font-semibold">Inbox</h1>
 
       {convos.length === 0 ? (
-        <p className="text-white/70">No conversations yet.</p>
+        <p className="text-slate-100/80">No conversations yet.</p>
       ) : (
         <ul className="space-y-2">
           {convos.map((c) => {
             const otherName =
               me && me.id === c.brand_id ? c.creator_name : c.brand_name;
             return (
-              <li key={c.id} className="rounded-xl border border-white/10 p-4 bg-neutral-900">
+              <li
+                key={c.id}
+                className="rounded-2xl border border-white/10 bg-[radial-gradient(circle_at_15%_20%,rgba(255,255,255,0.05),transparent_30%),radial-gradient(circle_at_85%_0%,rgba(79,70,229,0.12),transparent_32%),#0f172a] p-4 shadow-[0_12px_32px_rgba(15,23,42,0.32)]"
+              >
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="font-medium">{otherName}</div>
-                    <div className="text-xs text-white/60">
+                    <div className="font-semibold text-white">{otherName}</div>
+                    <div className="text-xs text-slate-200/80">
                       Started {new Date(c.created_at).toLocaleString()}
                     </div>
                   </div>
                   <Link
                     href={`/dashboard/inbox/${c.id}`}
-                    className="rounded-full border px-4 py-2"
+                    className="inline-flex items-center rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold shadow-[0_12px_25px_rgba(79,70,229,0.35)] border border-primary/60 hover:brightness-110 transition focus-ring"
                   >
                     Open
                   </Link>
