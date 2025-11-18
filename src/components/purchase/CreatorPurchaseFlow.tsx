@@ -90,56 +90,62 @@ export default function CreatorPurchaseFlow({
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full space-y-4">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-6">
-        <img
-          src={creator.avatarUrl || "/demo/creator.jpg"}
-          alt=""
-          className="h-10 w-10 rounded-full border border-white/10 object-cover"
-        />
-        <div className="text-lg font-semibold text-white">{creator.name}</div>
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <img
+            src={creator.avatarUrl || "/demo/creator.jpg"}
+            alt=""
+            className="h-12 w-12 rounded-full border object-cover"
+          />
+          <div>
+            <div className="text-lg font-semibold text-slate-900">{creator.name}</div>
+            <p className="text-sm text-muted-foreground">Custom video booking</p>
+          </div>
+        </div>
+        <span className="pill">Secure checkout</span>
       </div>
 
-      <Card className="bg-neutral-900 border-white/10">
-        <CardContent className="p-6 space-y-6 text-white">
+      <Card className="section-shell">
+        <CardContent className="p-6 space-y-6 text-foreground">
           {/* Step indicator */}
-          <div className="flex items-center gap-2 text-xs text-white/60">
-            <div className={cn("h-1 rounded-full bg-white/20 w-full", step >= 1 && "bg-white/70")} />
-            <div className={cn("h-1 rounded-full bg-white/20 w-full", step >= 2 && "bg-white/70")} />
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <div className={cn("h-1 rounded-full bg-muted w-full", step >= 1 && "bg-primary/70")} />
+            <div className={cn("h-1 rounded-full bg-muted w-full", step >= 2 && "bg-primary/70")} />
           </div>
 
           {/* STEP 1 - choose video rate */}
           {step === 1 && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               <CardHeader className="px-0 pt-0">
-                <CardTitle className="text-xl">Step 1: Choose a video rate</CardTitle>
+                <CardTitle className="text-xl text-slate-900">Step 1: Choose a video rate</CardTitle>
               </CardHeader>
 
               <div className="space-y-3">
                 {videoPlans.length === 0 ? (
-                  <p className="text-sm text-white/60">No rates available yet.</p>
+                  <p className="text-sm text-muted-foreground">No rates available yet.</p>
                 ) : (
                   videoPlans.map((p) => (
                     <button
                       key={p.rateId}
                       className={cn(
-                        "w-full rounded-xl border p-4 bg-black/20 text-left transition",
-                        "border-white/10 hover:bg-white/5",
-                        selectedRateId === p.rateId && "ring-2 ring-white/60"
+                        "w-full rounded-xl border p-4 text-left transition bg-white",
+                        "border-border hover:border-primary/40 hover:shadow-sm",
+                        selectedRateId === p.rateId && "ring-2 ring-primary/50 shadow-md"
                       )}
                       onClick={() => setSelectedRateId(p.rateId)}
                     >
                       <div className="flex items-center justify-between">
                         <div>
-                          <div className="font-medium">{p.label}</div>
-                          <p className="text-xs text-white/60 mt-1">Creator fulfills a custom video.</p>
+                          <div className="font-medium text-slate-900">{p.label}</div>
+                          <p className="text-xs text-muted-foreground mt-1">Creator fulfills a custom video.</p>
                         </div>
                         <div className="text-right">
-                          <div className="text-white/80">
+                          <div className="text-foreground font-semibold">
                             {formatMoney(p.price_cents, p.currency)}
                           </div>
-                          <div className="text-[11px] text-white/50">includes creator payment</div>
+                          <div className="text-[11px] text-muted-foreground">includes creator payment</div>
                         </div>
                       </div>
                     </button>
@@ -147,7 +153,7 @@ export default function CreatorPurchaseFlow({
                 )}
               </div>
 
-              <div className="flex items-center justify-between mt-6 text-sm text-white/60">
+              <div className="flex items-center justify-between mt-6 text-sm text-muted-foreground">
                 <span>Secure checkout via Stripe in the next step.</span>
                 <Button disabled={!canContinueStep2} onClick={() => setStep(2)}>
                   Continue →
@@ -160,43 +166,43 @@ export default function CreatorPurchaseFlow({
           {step === 2 && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               <CardHeader className="px-0 pt-0">
-                <CardTitle className="text-xl">Step 2: Confirm & Checkout</CardTitle>
+                <CardTitle className="text-xl text-slate-900">Step 2: Confirm & Checkout</CardTitle>
               </CardHeader>
 
-              <div className="space-y-2 text-white/80">
-                <div className="flex items-center justify-between rounded-lg bg-black/30 border border-white/10 p-3">
+              <div className="space-y-2 text-foreground">
+                <div className="flex items-center justify-between rounded-lg bg-muted border border-border p-3">
                   <div>
-                    <p className="text-sm text-white/60">Format</p>
-                    <p className="font-semibold">Video</p>
+                    <p className="text-sm text-muted-foreground">Format</p>
+                    <p className="font-semibold text-slate-900">Video</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm text-white/60">Selected rate</p>
-                    <p className="font-semibold">{selectedPlan?.label ?? "—"}</p>
+                    <p className="text-sm text-muted-foreground">Selected rate</p>
+                    <p className="font-semibold text-slate-900">{selectedPlan?.label ?? "—"}</p>
                   </div>
                 </div>
 
-                <div className="rounded-lg bg-black/40 border border-white/10 p-3">
+                <div className="rounded-lg bg-white border border-border p-3">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-white/70">Video rate</span>
-                    <span className="font-medium">
+                    <span className="text-muted-foreground">Video rate</span>
+                    <span className="font-medium text-slate-900">
                       {selectedPlan ? formatMoney(selectedPlan.price_cents, selectedPlan.currency) : "—"}
                     </span>
                   </div>
-                  <div className="mt-2 text-xs text-white/60">
+                  <div className="mt-2 text-xs text-muted-foreground">
                     Payment is handled by Stripe; we never see your card details.
                   </div>
                 </div>
               </div>
 
-              <div className="rounded-lg bg-black/30 border border-white/10 p-3 mt-4">
+              <div className="rounded-lg bg-muted border border-border p-3 mt-4">
                 <label className="flex items-start gap-3 text-sm">
                   <input
                     type="checkbox"
-                    className="mt-0.5"
+                    className="mt-0.5 accent-primary"
                     checked={termsAccepted}
                     onChange={(e) => setTermsAccepted(e.target.checked)}
                   />
-                  <span className="text-white/80">
+                  <span className="text-foreground">
                     I agree to the{" "}
                     <a
                       href="/terms/purchase"
@@ -211,7 +217,7 @@ export default function CreatorPurchaseFlow({
                 </label>
               </div>
 
-              {err && <p className="text-sm text-red-400 mt-2">{err}</p>}
+              {err && <p className="text-sm text-red-500 mt-2">{err}</p>}
 
               <div className="flex justify-between mt-6">
                 <Button variant="ghost" onClick={() => setStep(1)}>
@@ -234,7 +240,7 @@ export default function CreatorPurchaseFlow({
         </CardContent>
       </Card>
 
-      <div className="text-gray-400 text-xs mt-6">
+      <div className="text-muted-foreground text-xs mt-6">
         ❌ No adult • ❌ No mean stuff • ❌ No politics
       </div>
     </div>

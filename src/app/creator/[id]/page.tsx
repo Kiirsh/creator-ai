@@ -110,17 +110,17 @@ export default async function Page({
       />
 
       {/* Price card */}
-      <div className="rounded-3xl bg-neutral-900 text-white p-5 md:p-6 space-y-3">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-white/90">
+      <div className="section-shell p-5 md:p-6 space-y-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-foreground">
           <div>
-            <div className="text-xs uppercase text-white/50">From</div>
-            <div className="text-lg font-semibold">
+            <div className="text-xs uppercase text-muted-foreground">From</div>
+            <div className="text-lg font-semibold text-slate-900">
               {money(creator.base_rate_cents || 0)}
             </div>
           </div>
           <div>
-            <div className="text-xs uppercase text-white/50">Reviews</div>
-            <div className="text-lg font-semibold">
+            <div className="text-xs uppercase text-muted-foreground">Reviews</div>
+            <div className="text-lg font-semibold text-slate-900">
               <Link href="#reviews">⭐ 5.00 (170)</Link>
             </div>
           </div>
@@ -128,22 +128,30 @@ export default async function Page({
       </div>
 
       {/* Choose your format */}
-      <section className="rounded-2xl border border-white/10 bg-neutral-900 p-4">
-        <h2 className="text-lg font-semibold mb-3">Choose your format</h2>
+      <section className="section-shell p-5 space-y-4">
+        <div className="flex items-start justify-between">
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900">Choose your format</h2>
+            <p className="text-sm text-muted-foreground mt-1">
+              Video is available now. Audio is disabled while we focus on the best video experience.
+            </p>
+          </div>
+          <span className="pill">Video only</span>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Video card */}
-          <div className="rounded-xl border border-white/10 p-4 bg-black/20">
-            <div className="font-semibold">Video</div>
-            <p className="text-sm text-white/70 mt-1">
+          <div className="rounded-xl border bg-gradient-to-br from-white to-slate-50 p-5 shadow-sm">
+            <div className="font-semibold text-slate-900">Video</div>
+            <p className="text-sm text-muted-foreground mt-1">
               Book a custom video from this creator. Extras (brand usage, TikTok post) are picked on the next screen.
             </p>
-            <div className="mt-3 flex justify-end">
+            <div className="mt-4 flex justify-end">
               <Link
                 href={`/creator/${creator.id}/purchase`}
-                className="rounded-full border px-4 py-2 transition hover:bg-white hover:text-black"
+                className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90 focus-ring"
               >
-                Choose Video
+                Choose video
               </Link>
             </div>
           </div>
@@ -152,17 +160,17 @@ export default async function Page({
       </section>
 
       {/* Socials */}
-      <section className="rounded-2xl border border-white/10 bg-neutral-900 p-4">
-        <h2 className="text-lg font-semibold mb-3">Socials</h2>
-        <ul className="space-y-3 text-white/90">
+      <section className="section-shell p-5 space-y-3">
+        <h2 className="text-lg font-semibold text-slate-900">Socials</h2>
+        <ul className="space-y-3 text-foreground">
           {creator.instagram_handle ? (
             <li className="flex items-center gap-3">
-              <Instagram className="h-5 w-5 text-white/80" />
+              <Instagram className="h-5 w-5 text-muted-foreground" />
               <div>
-                <span className="text-white/60 text-sm">Instagram</span>
-                <div className="font-medium">{creator.instagram_handle}</div>
+                <span className="text-muted-foreground text-sm">Instagram</span>
+                <div className="font-medium text-slate-900">{creator.instagram_handle}</div>
                 {creator.instagram_followers != null && (
-                  <div className="text-white/60 text-sm">
+                  <div className="text-muted-foreground text-sm">
                     {formatFollowers(creator.instagram_followers)} followers
                   </div>
                 )}
@@ -172,12 +180,12 @@ export default async function Page({
 
           {creator.youtube_handle ? (
             <li className="flex items-center gap-3">
-              <Youtube className="h-5 w-5 text-white/80" />
+              <Youtube className="h-5 w-5 text-muted-foreground" />
               <div>
-                <span className="text-white/60 text-sm">YouTube</span>
-                <div className="font-medium">{creator.youtube_handle}</div>
+                <span className="text-muted-foreground text-sm">YouTube</span>
+                <div className="font-medium text-slate-900">{creator.youtube_handle}</div>
                 {creator.youtube_followers != null && (
-                  <div className="text-white/60 text-sm">
+                  <div className="text-muted-foreground text-sm">
                     {formatFollowers(creator.youtube_followers)} subscribers
                   </div>
                 )}
@@ -187,12 +195,12 @@ export default async function Page({
 
           {creator.tiktok_handle ? (
             <li className="flex items-center gap-3">
-              <Music2 className="h-5 w-5 text-white/80" />
+              <Music2 className="h-5 w-5 text-muted-foreground" />
               <div>
-                <span className="text-white/60 text-sm">TikTok</span>
-                <div className="font-medium">{creator.tiktok_handle}</div>
+                <span className="text-muted-foreground text-sm">TikTok</span>
+                <div className="font-medium text-slate-900">{creator.tiktok_handle}</div>
                 {creator.tiktok_followers != null && (
-                  <div className="text-white/60 text-sm">
+                  <div className="text-muted-foreground text-sm">
                     {formatFollowers(creator.tiktok_followers)} followers
                   </div>
                 )}
@@ -202,12 +210,12 @@ export default async function Page({
 
           {creator.sora2_handle ? (
             <li className="flex items-center gap-3">
-              <Sparkles className="h-5 w-5 text-white/80" />
+              <Sparkles className="h-5 w-5 text-muted-foreground" />
               <div>
-                <span className="text-white/60 text-sm">Sora 2</span>
-                <div className="font-medium">{creator.sora2_handle}</div>
+                <span className="text-muted-foreground text-sm">Sora 2</span>
+                <div className="font-medium text-slate-900">{creator.sora2_handle}</div>
                 {creator.sora2_followers != null && (
-                  <div className="text-white/60 text-sm">
+                  <div className="text-muted-foreground text-sm">
                     {formatFollowers(creator.sora2_followers)} followers
                   </div>
                 )}
@@ -220,27 +228,32 @@ export default async function Page({
           !creator.youtube_handle &&
           !creator.tiktok_handle &&
           !creator.sora2_handle && (
-            <p className="text-sm text-white/60">No socials added yet.</p>
+            <p className="text-sm text-muted-foreground">No socials added yet.</p>
           )}
       </section>
 
       {/* Rates — one Buy button per rate */}
-      <section id="rates" className="rounded-2xl border border-white/10 bg-neutral-900 p-4">
-        <h2 className="text-lg font-semibold mb-1">Rates</h2>
-        <p className="mb-3 text-xs text-white/60">
-          Extras are selected at checkout: <span className="text-white/70">Brand usage license</span> and{" "}
-          <span className="text-white/70">Creator TikTok post</span>.
-        </p>
+      <section id="rates" className="section-shell p-5 space-y-3">
+        <div className="flex items-start justify-between">
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900">Rates</h2>
+            <p className="text-xs text-muted-foreground">
+              Extras are selected at checkout: <span className="text-foreground">Brand usage license</span> and{" "}
+              <span className="text-foreground">Creator TikTok post</span>.
+            </p>
+          </div>
+          <span className="pill">Video only</span>
+        </div>
 
         {rateCards.length === 0 ? (
-          <p className="text-white/70 text-sm">No rates available yet.</p>
+          <p className="text-muted-foreground text-sm">No rates available yet.</p>
         ) : (
           <ul className="space-y-2">
             {rateCards.map((r) => (
               <li key={r.id} className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <div className="font-medium">{r.label}</div>
-                  <div className="text-white/70 text-sm">
+                  <div className="font-medium text-slate-900">{r.label}</div>
+                  <div className="text-muted-foreground text-sm">
                     {new Intl.NumberFormat(undefined, {
                       style: "currency",
                       currency: r.currency || "GBP",
@@ -251,7 +264,7 @@ export default async function Page({
                 <BuyRateButton
                   creatorId={creator.id}
                   rateId={r.id}
-                  className="rounded-full border px-4 py-2 transition hover:bg-white hover:text-black"
+                  className="rounded-lg border px-4 py-2 text-sm font-semibold text-foreground transition hover:bg-primary hover:text-primary-foreground"
                 >
                   Buy this
                 </BuyRateButton>
@@ -262,16 +275,19 @@ export default async function Page({
       </section>
 
       {/* My no-nos */}
-      <section className="rounded-2xl border border-white/10 bg-neutral-900 p-4">
-        <h2 className="text-lg font-semibold mb-3">My no-nos</h2>
+      <section className="section-shell p-5 space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-slate-900">My no-nos</h2>
+          <span className="pill">Shared with buyers</span>
+        </div>
         {noNos.length === 0 ? (
-          <p className="text-white/70 text-sm">None listed.</p>
+          <p className="text-muted-foreground text-sm">None listed.</p>
         ) : (
           <div className="flex flex-wrap gap-2">
             {noNos.map((tag: string) => (
               <span
                 key={tag}
-                className="rounded-full px-3 py-1.5 text-sm border bg-neutral-900 text-white/80 border-white/15"
+                className="rounded-full px-3 py-1.5 text-sm border bg-muted text-foreground border-border"
               >
                 {tag}
               </span>
@@ -284,7 +300,7 @@ export default async function Page({
       <div className="hidden md:flex gap-3 sticky bottom-4 justify-end">
         <StartConversationButton
           creatorId={creator.id}
-          className="rounded-full border border-white/20 px-5 py-3 text-white transition-colors duration-200 hover:bg-white hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+          className="rounded-full border border-border px-5 py-3 text-foreground transition-colors duration-200 hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
           aria-label="Message this creator"
         >
           Message

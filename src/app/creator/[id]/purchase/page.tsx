@@ -39,7 +39,14 @@ export default async function PurchasePage({
       })) ?? [];
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-8">
+    <main className="mx-auto max-w-3xl px-4 py-8 space-y-4">
+      <div className="section-shell p-5">
+        <h1 className="text-2xl font-semibold text-slate-900">Book a video</h1>
+        <p className="text-sm text-muted-foreground">
+          Pick the video rate that fits your brief. Audio options are turned off while we streamline the video experience.
+        </p>
+      </div>
+
       <CreatorPurchaseFlow
         creator={{
           id: creatorRow.id,
