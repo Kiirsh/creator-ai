@@ -29,9 +29,8 @@ export default async function Page() {
         </h1>
 
         <p className="mt-4 text-white/80 max-w-2xl">
-          Make AI videos of celebs doing amazing things, for your friends or with your products.
-          Whether it's your favourite celeb taking your supplements, or the hottest athlete wearing
-          your activewear — book here to unlock their permission on the Sora app
+          Create AI videos of public figures with their permission. Perfect for brand campaigns or just
+          for fun. Book through filmee to unlock their permission on the Sora app
         </p>
 
         <div className="mt-6 flex flex-wrap items-center gap-3">
