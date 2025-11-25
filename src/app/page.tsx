@@ -34,18 +34,18 @@ export default async function Page() {
           your activewear — book here to unlock their permission on the Sora app
         </p>
 
-        <div className="mt-6 flex items-center gap-3">
+        <div className="mt-6 flex flex-wrap items-center gap-3">
           <Link
             href="/creators"
-            className="rounded-full px-5 py-3 font-medium text-black bg-brand-gradient"
+            className="inline-flex items-center gap-2 rounded-full bg-brand-gradient px-5 py-3 text-base font-semibold text-black shadow-lg shadow-indigo-500/25 transition hover:translate-y-[-2px] hover:shadow-indigo-500/35 focus-ring"
           >
             Browse creators
           </Link>
           <Link
             href="/auth/signup"
-            className="rounded-full px-5 py-3 font-medium border-brand-gradient"
+            className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-3 text-base font-semibold text-white shadow-sm shadow-black/30 transition hover:-translate-y-0.5 hover:border-white/30 hover:bg-white/15 focus-ring"
           >
-            Get started
+            Creators: create your profile
           </Link>
         </div>
       </section>
