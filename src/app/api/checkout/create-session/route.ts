@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import type Stripe from "stripe";
+import { isAudioLikeLabel } from "@/lib/rates";
 
 export const runtime = "nodejs";
 
@@ -38,6 +39,11 @@ export async function POST(req: Request) {
     if (rateErr) return NextResponse.json({ error: rateErr.message }, { status: 500 });
     if (!rate) {
       return NextResponse.json({ error: "Rate not found for this creator" }, { status: 404 });
+    }
+
+    // Audio bookings are disabled; block any audio-tagged rates
+    if (isAudioLikeLabel(rate.label)) {
+      return NextResponse.json({ error: "Audio purchases are not available" }, { status: 400 });
     }
 
     // 2) Creator must be onboarded + authoritative add-on prices

@@ -8,9 +8,7 @@ type Props = {
   creatorId: string;
   rates: Rate[];
   currency: string;          // e.g. "gbp"
-  aiAudioCents?: number;     // from DB (creators.ai_audio_cents)
   initialRateId?: string | null; // from query (?rate=...)
-  defaultAudioOn?: boolean;  // from query (?audio=1)
 };
 
 function fmt(cents: number, currency: string) {
@@ -24,15 +22,12 @@ export default function PurchaseSelector({
   creatorId,
   rates,
   currency,
-  aiAudioCents = 0,
   initialRateId = null,
-  defaultAudioOn = false,
 }: Props) {
   const [includeVideo, setIncludeVideo] = useState<boolean>(!!initialRateId || rates.length > 0);
   const [selectedRateId, setSelectedRateId] = useState<string | null>(
     initialRateId ?? (rates[0]?.id ?? null)
   );
-  const [includeAudio, setIncludeAudio] = useState<boolean>(!!defaultAudioOn);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -43,16 +38,15 @@ export default function PurchaseSelector({
   );
 
   const videoCents = includeVideo && selectedRate ? selectedRate.price_cents || 0 : 0;
-  const audioCents = includeAudio ? Math.max(0, aiAudioCents || 0) : 0;
 
-  const total = videoCents + audioCents;
+  const total = videoCents;
 
   async function checkout() {
     setErr(null);
     setLoading(true);
     try {
-      if (!includeVideo && !includeAudio) {
-        throw new Error("Please choose Video, AI Audio, or both.");
+      if (!includeVideo) {
+        throw new Error("Please choose a video rate to continue.");
       }
       const res = await fetch("/api/checkout/create-session", {
         method: "POST",
@@ -62,7 +56,7 @@ export default function PurchaseSelector({
           termsAccepted,
           products: {
             video_rate_id: includeVideo ? selectedRateId : null,
-            ai_audio: includeAudio ? true : false,
+            ai_audio: false,
           },
         }),
       });
@@ -114,28 +108,6 @@ export default function PurchaseSelector({
             <div className="text-base font-semibold">
               {fmt(videoCents, currency)}
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* AI Audio */}
-      <div className="rounded-xl bg-black/30 border border-white/10 p-3">
-        <label className="flex items-center justify-between gap-3">
-          <span className="font-medium">AI Audio</span>
-          <input
-            type="checkbox"
-            checked={includeAudio}
-            onChange={(e) => setIncludeAudio(e.target.checked)}
-            disabled={!aiAudioCents}
-          />
-        </label>
-
-        <div className={`mt-3 flex items-center justify-between ${!aiAudioCents ? "opacity-50" : ""}`}>
-          <p className="text-sm text-white/70">
-            Get a voice-over in the creator’s cloned voice. You’ll upload a script after payment.
-          </p>
-          <div className="text-base font-semibold">
-            {aiAudioCents ? fmt(aiAudioCents, currency) : "N/A"}
           </div>
         </div>
       </div>

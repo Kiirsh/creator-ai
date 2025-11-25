@@ -8,6 +8,7 @@ import { supabase } from "@/lib/supabase";
 import SignOutButton from "@/components/auth/SignOutButton";
 import { cn } from "@/lib/utils";
 import { Poppins } from "next/font/google";
+import { Button } from "@/components/ui/button";
 
 const poppins = Poppins({
   weight: "700",
@@ -122,27 +123,30 @@ export default function SiteHeader() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-neutral-950/80 backdrop-blur border-b border-white/10">
-      <div className="mx-auto max-w-6xl px-4 h-16 flex items-center justify-between">
+    <header className="sticky top-0 z-40 w-full border-b border-border/70 bg-white/80 backdrop-blur shadow-sm dark:bg-slate-900/80">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         {/* Brand */}
         <Link href="/" className="inline-flex items-center gap-2" aria-label="filmee home">
           <span
             className={cn(
               poppins.className,
-              "text-4xl font-bold bg-clip-text text-transparent text-brand-gradient"
+              "text-3xl font-semibold tracking-tight text-slate-900 dark:text-white"
             )}
           >
             filmee
           </span>
+          <span className="rounded-full bg-gradient-to-r from-primary/15 via-secondary/40 to-primary/15 px-3 py-1 text-[11px] font-semibold text-primary">
+            Creator Studio
+          </span>
         </Link>
 
         {/* Nav */}
-        <nav className="flex items-center gap-3">
+        <nav className="hidden md:flex items-center gap-2 text-sm">
           <Link
             href="/creators"
             className={cn(
-              "rounded-full px-3 py-1.5 text-sm border border-white/10 text-white/80 hover:text-white hover:bg-white/5",
-              pathname.startsWith("/creators") && "bg-white text-black border-white"
+              "rounded-full px-3 py-2 text-muted-foreground transition hover:text-foreground hover:bg-muted",
+              pathname.startsWith("/creators") && "bg-primary/10 text-primary"
             )}
           >
             Browse
@@ -155,8 +159,8 @@ export default function SiteHeader() {
                   <Link
                     href="/dashboard/profile"
                     className={cn(
-                      "rounded-full px-3 py-1.5 text-sm border border-white/10 text-white/80 hover:text-white hover:bg-white/5",
-                      pathname.startsWith("/dashboard/profile") && "bg-white text-black border-white"
+                      "rounded-full px-3 py-2 text-muted-foreground transition hover:text-foreground hover:bg-muted",
+                      pathname.startsWith("/dashboard/profile") && "bg-primary/10 text-primary"
                     )}
                   >
                     Profile
@@ -165,8 +169,8 @@ export default function SiteHeader() {
                   <Link
                     href="/dashboard/earnings"
                     className={cn(
-                      "rounded-full px-3 py-1.5 text-sm border border-white/10 text-white/80 hover:text-white hover:bg-white/5",
-                      pathname.startsWith("/dashboard/earnings") && "bg-white text-black border-white"
+                      "rounded-full px-3 py-2 text-muted-foreground transition hover:text-foreground hover:bg-muted",
+                      pathname.startsWith("/dashboard/earnings") && "bg-primary/10 text-primary"
                     )}
                   >
                     Earnings
@@ -177,13 +181,13 @@ export default function SiteHeader() {
               <Link
                 href="/dashboard/inbox"
                 className={cn(
-                  "relative rounded-full px-3 py-1.5 text-sm border border-white/10 text-white/80 hover:text-white hover:bg-white/5",
-                  pathname.startsWith("/dashboard/inbox") && "bg-white text-black border-white"
+                  "relative rounded-full px-3 py-2 text-muted-foreground transition hover:text-foreground hover:bg-muted",
+                  pathname.startsWith("/dashboard/inbox") && "bg-primary/10 text-primary"
                 )}
               >
                 Inbox
                 {unreadTotal > 0 && (
-                  <span className="absolute -top-2 -right-3 rounded-full bg-pink-500 text-white text-[10px] px-1.5 py-0.5">
+                  <span className="absolute -top-1 -right-2 rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground">
                     {unreadTotal > 99 ? "99+" : unreadTotal}
                   </span>
                 )}
@@ -192,14 +196,26 @@ export default function SiteHeader() {
               <SignOutButton />
             </>
           ) : (
-            <Link
-              href="/auth/signin"
-              className="rounded-full border px-4 py-2 text-sm hover:bg-white/5 border-white/10 text-white/80 hover:text-white"
-            >
-              Sign in
-            </Link>
+            <Button asChild size="sm" className="rounded-full px-4">
+              <Link href="/auth/signin">Sign in</Link>
+            </Button>
           )}
         </nav>
+
+        <div className="flex items-center gap-2 md:hidden">
+          {me ? (
+            <Link
+              href="/dashboard/inbox"
+              className="rounded-lg bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary"
+            >
+              Inbox
+            </Link>
+          ) : (
+            <Button asChild size="sm" className="rounded-full px-4">
+              <Link href="/auth/signin">Sign in</Link>
+            </Button>
+          )}
+        </div>
       </div>
     </header>
   );

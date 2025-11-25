@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import { isAudioLikeLabel } from "@/lib/rates";
 
 /**
  * POST /api/checkout
@@ -29,6 +30,10 @@ export async function POST(req: Request) {
 
     if (rateErr || !rate || rate.creator_id !== creatorId) {
       return NextResponse.json({ error: "Invalid rate" }, { status: 400 });
+    }
+
+    if (isAudioLikeLabel(rate.label)) {
+      return NextResponse.json({ error: "Audio purchases are not available" }, { status: 400 });
     }
 
     // 2) Create a pending order row

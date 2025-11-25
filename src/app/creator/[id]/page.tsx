@@ -87,16 +87,7 @@ export default async function Page({
         currency: string | null;
       }[] = (rates as any) || [];
 
-  // 3) AI audio per-character rate (GBP cents) — from creators table
-  const { data: audioRow } = await supabase
-    .from("creators")
-    .select("audio_char_rate_cents")
-    .eq("id", creator.id)
-    .maybeSingle<{ audio_char_rate_cents: number | null }>();
-
-  const audioRateCents = audioRow?.audio_char_rate_cents ?? null;
-
-  // 4) No-nos
+  // 3) No-nos
   const { data: nn } = await supabase
     .from("creator_no_nos")
     .select("tag")
@@ -107,179 +98,111 @@ export default async function Page({
   const formatFollowers = (n?: number | null) =>
     typeof n === "number" ? new Intl.NumberFormat().format(n) : null;
 
-  const fmtPerChar = (cents: number | null) =>
-    cents == null
-      ? null
-      : new Intl.NumberFormat(undefined, {
-          style: "currency",
-          currency: "GBP",
-        }).format(cents / 100) + " / char";
-
   return (
-    <main className="mx-auto max-w-4xl px-4 py-8 space-y-6">
+    <main className="mx-auto max-w-5xl px-4 py-10 space-y-8">
       <OwnerBanner creatorId={creator.id} />
 
-      <ProfileHeader
-        name={creator.display_name}
-        subtitle={creator.headline || "Creator"}
-        avatarUrl={creator.avatar_url || "/demo/creator.jpg"}
-        verified={!!creator.is_verified}
-      />
-
-      {/* Price card */}
-      <div className="rounded-3xl bg-neutral-900 text-white p-5 md:p-6 space-y-3">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-white/90">
-          <div>
-            <div className="text-xs uppercase text-white/50">From</div>
-            <div className="text-lg font-semibold">
-              {money(creator.base_rate_cents || 0)}
+      <section className="page-hero">
+        <div className="page-hero-content">
+          <div className="space-y-4">
+            <div className="surface-kicker">Featured creator</div>
+            <div className="space-y-2">
+              <h1 className="text-3xl md:text-4xl font-semibold text-slate-900">{creator.display_name}</h1>
+              <p className="text-base text-muted-foreground max-w-2xl">
+                {creator.headline || "Book a custom, high-quality video from this creator."}
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <span className="pill bg-secondary text-secondary-foreground">Video only</span>
+              <span className="pill">Fast responses</span>
+              <span className="pill">Secure checkout</span>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <StartConversationButton creatorId={creator.id} className="inline-flex" />
+              <BuyRateButton creatorId={creator.id} rates={rateCards} />
             </div>
           </div>
-          <div>
-            <div className="text-xs uppercase text-white/50">Reviews</div>
-            <div className="text-lg font-semibold">
-              <Link href="#reviews">⭐ 5.00 (170)</Link>
+          <div className="section-shell p-5 space-y-4 shadow-sm">
+            <ProfileHeader
+              name={creator.display_name}
+              subtitle={creator.headline || "Creator"}
+              avatarUrl={creator.avatar_url || "/demo/creator.jpg"}
+              verified={!!creator.is_verified}
+            />
+            <div className="info-grid text-sm text-foreground">
+              <div>
+                <p className="text-xs uppercase text-muted-foreground">From</p>
+                <p className="text-lg font-semibold">{money(creator.base_rate_cents || 0)}</p>
+              </div>
+              <div>
+                <p className="text-xs uppercase text-muted-foreground">Reviews</p>
+                <p className="text-lg font-semibold">
+                  <Link href="#reviews">⭐ 5.00 (170)</Link>
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Choose your format */}
-      <section className="rounded-2xl border border-white/10 bg-neutral-900 p-4">
-        <h2 className="text-lg font-semibold mb-3">Choose your format</h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Video card */}
-          <div className="rounded-xl border border-white/10 p-4 bg-black/20">
-            <div className="font-semibold">Video</div>
-            <p className="text-sm text-white/70 mt-1">
-              Book a custom video from this creator. Extras (brand usage, TikTok post) are picked on the next screen.
+      <section className="section-shell p-6 space-y-5">
+        <div className="flex items-start justify-between gap-3">
+          <div className="space-y-1">
+            <h2 className="text-xl font-semibold text-slate-900">Choose your format</h2>
+            <p className="text-sm text-muted-foreground">
+              Video is available now. Audio is disabled while we focus on the best video experience.
             </p>
-            <div className="mt-3 flex justify-end">
+          </div>
+          <span className="pill">Video only</span>
+        </div>
+
+        <div className="card-stack">
+          <div className="rounded-xl border bg-gradient-to-br from-white to-slate-50 p-5 shadow-sm">
+            <div className="flex items-start justify-between gap-3">
+              <div className="space-y-1">
+                <div className="font-semibold text-slate-900">Video</div>
+                <p className="text-sm text-muted-foreground">
+                  Book a custom video from this creator. Extras (brand usage, TikTok post) are picked on the next screen.
+                </p>
+              </div>
+              <span className="pill">Recommended</span>
+            </div>
+            <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+              <p className="text-sm text-muted-foreground">Starts at {money(creator.base_rate_cents || 0)}</p>
               <Link
                 href={`/creator/${creator.id}/purchase`}
-                className="rounded-full border px-4 py-2 transition hover:bg-white hover:text-black"
+                className="inline-flex items-center justify-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90 focus-ring"
               >
-                Choose Video
-              </Link>
-            </div>
-          </div>
-
-          {/* AI Audio card */}
-          <div className="rounded-xl border border-white/10 p-4 bg-black/20">
-            <div className="font-semibold">AI Audio</div>
-            <p className="text-sm text-white/70 mt-1">
-              Order a voice-over in the creator’s cloned voice (via ElevenLabs). Paste a script and we’ll generate a high-quality MP3.
-            </p>
-            {audioRateCents != null ? (
-              <p className="text-xs text-white/60 mt-2">
-                From <span className="text-white/80">{fmtPerChar(audioRateCents)}</span>
-              </p>
-            ) : (
-              <p className="text-xs text-white/60 mt-2">Pricing not set yet.</p>
-            )}
-            <div className="mt-3 flex justify-end">
-              <Link
-                href={`/creator/${creator.id}/purchase?format=audio`}
-                className="rounded-full border px-4 py-2 transition hover:bg-white hover:text-black"
-              >
-                Choose AI Audio
+                Choose video
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Socials */}
-      <section className="rounded-2xl border border-white/10 bg-neutral-900 p-4">
-        <h2 className="text-lg font-semibold mb-3">Socials</h2>
-        <ul className="space-y-3 text-white/90">
-          {creator.instagram_handle ? (
-            <li className="flex items-center gap-3">
-              <Instagram className="h-5 w-5 text-white/80" />
-              <div>
-                <span className="text-white/60 text-sm">Instagram</span>
-                <div className="font-medium">{creator.instagram_handle}</div>
-                {creator.instagram_followers != null && (
-                  <div className="text-white/60 text-sm">
-                    {formatFollowers(creator.instagram_followers)} followers
-                  </div>
-                )}
-              </div>
-            </li>
-          ) : null}
-
-          {creator.youtube_handle ? (
-            <li className="flex items-center gap-3">
-              <Youtube className="h-5 w-5 text-white/80" />
-              <div>
-                <span className="text-white/60 text-sm">YouTube</span>
-                <div className="font-medium">{creator.youtube_handle}</div>
-                {creator.youtube_followers != null && (
-                  <div className="text-white/60 text-sm">
-                    {formatFollowers(creator.youtube_followers)} subscribers
-                  </div>
-                )}
-              </div>
-            </li>
-          ) : null}
-
-          {creator.tiktok_handle ? (
-            <li className="flex items-center gap-3">
-              <Music2 className="h-5 w-5 text-white/80" />
-              <div>
-                <span className="text-white/60 text-sm">TikTok</span>
-                <div className="font-medium">{creator.tiktok_handle}</div>
-                {creator.tiktok_followers != null && (
-                  <div className="text-white/60 text-sm">
-                    {formatFollowers(creator.tiktok_followers)} followers
-                  </div>
-                )}
-              </div>
-            </li>
-          ) : null}
-
-          {creator.sora2_handle ? (
-            <li className="flex items-center gap-3">
-              <Sparkles className="h-5 w-5 text-white/80" />
-              <div>
-                <span className="text-white/60 text-sm">Sora 2</span>
-                <div className="font-medium">{creator.sora2_handle}</div>
-                {creator.sora2_followers != null && (
-                  <div className="text-white/60 text-sm">
-                    {formatFollowers(creator.sora2_followers)} followers
-                  </div>
-                )}
-              </div>
-            </li>
-          ) : null}
-        </ul>
-
-        {!creator.instagram_handle &&
-          !creator.youtube_handle &&
-          !creator.tiktok_handle &&
-          !creator.sora2_handle && (
-            <p className="text-sm text-white/60">No socials added yet.</p>
-          )}
-      </section>
-
-      {/* Rates — one Buy button per rate */}
-      <section id="rates" className="rounded-2xl border border-white/10 bg-neutral-900 p-4">
-        <h2 className="text-lg font-semibold mb-1">Rates</h2>
-        <p className="mb-3 text-xs text-white/60">
-          Extras are selected at checkout: <span className="text-white/70">Brand usage license</span> and{" "}
-          <span className="text-white/70">Creator TikTok post</span>.
-        </p>
+      <section id="rates" className="section-shell p-6 space-y-4">
+        <div className="flex items-start justify-between">
+          <div className="space-y-1">
+            <h2 className="text-lg font-semibold text-slate-900">Rates</h2>
+            <p className="text-xs text-muted-foreground">
+              Extras are selected at checkout: <span className="text-foreground">Brand usage license</span> and <span className="text-foreground">Creator TikTok post</span>.
+            </p>
+          </div>
+          <span className="pill">Video only</span>
+        </div>
 
         {rateCards.length === 0 ? (
-          <p className="text-white/70 text-sm">No rates available yet.</p>
+          <p className="text-muted-foreground text-sm">No rates available yet.</p>
         ) : (
-          <ul className="space-y-2">
+          <div className="space-y-3">
             {rateCards.map((r) => (
-              <li key={r.id} className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <div className="font-medium">{r.label}</div>
-                  <div className="text-white/70 text-sm">
+              <div
+                key={r.id}
+                className="flex flex-col gap-3 rounded-xl border bg-white p-4 shadow-sm md:flex-row md:items-center md:justify-between"
+              >
+                <div className="space-y-1">
+                  <div className="font-semibold text-slate-900">{r.label}</div>
+                  <div className="text-muted-foreground text-sm">
                     {new Intl.NumberFormat(undefined, {
                       style: "currency",
                       currency: r.currency || "GBP",
@@ -290,48 +213,126 @@ export default async function Page({
                 <BuyRateButton
                   creatorId={creator.id}
                   rateId={r.id}
-                  className="rounded-full border px-4 py-2 transition hover:bg-white hover:text-black"
+                  className="rounded-full border px-4 py-2 text-sm font-semibold text-foreground transition hover:bg-primary hover:text-primary-foreground focus-ring"
                 >
                   Buy this
                 </BuyRateButton>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-
-      {/* My no-nos */}
-      <section className="rounded-2xl border border-white/10 bg-neutral-900 p-4">
-        <h2 className="text-lg font-semibold mb-3">My no-nos</h2>
-        {noNos.length === 0 ? (
-          <p className="text-white/70 text-sm">None listed.</p>
-        ) : (
-          <div className="flex flex-wrap gap-2">
-            {noNos.map((tag: string) => (
-              <span
-                key={tag}
-                className="rounded-full px-3 py-1.5 text-sm border bg-neutral-900 text-white/80 border-white/15"
-              >
-                {tag}
-              </span>
+              </div>
             ))}
           </div>
         )}
       </section>
 
-      {/* Desktop CTAs — Message only */}
+      <section className="card-stack">
+        <div className="section-shell p-5 space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-slate-900">Socials</h2>
+            <span className="pill">Proof</span>
+          </div>
+          <ul className="space-y-3 text-foreground">
+            {creator.instagram_handle ? (
+              <li className="flex items-center gap-3">
+                <Instagram className="h-5 w-5 text-muted-foreground" />
+                <div>
+                  <span className="text-muted-foreground text-sm">Instagram</span>
+                  <div className="font-medium text-slate-900">{creator.instagram_handle}</div>
+                  {creator.instagram_followers != null && (
+                    <div className="text-muted-foreground text-sm">
+                      {formatFollowers(creator.instagram_followers)} followers
+                    </div>
+                  )}
+                </div>
+              </li>
+            ) : null}
+
+            {creator.youtube_handle ? (
+              <li className="flex items-center gap-3">
+                <Youtube className="h-5 w-5 text-muted-foreground" />
+                <div>
+                  <span className="text-muted-foreground text-sm">YouTube</span>
+                  <div className="font-medium text-slate-900">{creator.youtube_handle}</div>
+                  {creator.youtube_followers != null && (
+                    <div className="text-muted-foreground text-sm">
+                      {formatFollowers(creator.youtube_followers)} subscribers
+                    </div>
+                  )}
+                </div>
+              </li>
+            ) : null}
+
+            {creator.tiktok_handle ? (
+              <li className="flex items-center gap-3">
+                <Music2 className="h-5 w-5 text-muted-foreground" />
+                <div>
+                  <span className="text-muted-foreground text-sm">TikTok</span>
+                  <div className="font-medium text-slate-900">{creator.tiktok_handle}</div>
+                  {creator.tiktok_followers != null && (
+                    <div className="text-muted-foreground text-sm">
+                      {formatFollowers(creator.tiktok_followers)} followers
+                    </div>
+                  )}
+                </div>
+              </li>
+            ) : null}
+
+            {creator.sora2_handle ? (
+              <li className="flex items-center gap-3">
+                <Sparkles className="h-5 w-5 text-muted-foreground" />
+                <div>
+                  <span className="text-muted-foreground text-sm">Sora 2</span>
+                  <div className="font-medium text-slate-900">{creator.sora2_handle}</div>
+                  {creator.sora2_followers != null && (
+                    <div className="text-muted-foreground text-sm">
+                      {formatFollowers(creator.sora2_followers)} followers
+                    </div>
+                  )}
+                </div>
+              </li>
+            ) : null}
+
+            {!creator.instagram_handle &&
+            !creator.youtube_handle &&
+            !creator.tiktok_handle &&
+            !creator.sora2_handle ? (
+              <li className="text-muted-foreground">No socials provided.</li>
+            ) : null}
+          </ul>
+        </div>
+
+        <div className="section-shell p-5 space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-slate-900">My no-nos</h2>
+            <span className="pill">Shared with buyers</span>
+          </div>
+          {noNos.length === 0 ? (
+            <p className="text-sm text-muted-foreground">None listed.</p>
+          ) : (
+            <div className="flex flex-wrap gap-2 text-sm text-foreground">
+              {noNos.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full bg-muted px-3 py-1.5 text-sm text-foreground"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
       <div className="hidden md:flex gap-3 sticky bottom-4 justify-end">
         <StartConversationButton
           creatorId={creator.id}
-          className="rounded-full border border-white/20 px-5 py-3 text-white transition-colors duration-200 hover:bg-white hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+          className="rounded-full border border-border px-5 py-3 text-foreground transition-colors duration-200 hover:bg-primary hover:text-primary-foreground focus-ring"
           aria-label="Message this creator"
         >
           Message
         </StartConversationButton>
       </div>
 
-      {/* Mobile sticky CTA */}
       <StickyCTA creatorId={creator.id} />
     </main>
+
   );
 }

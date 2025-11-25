@@ -24,28 +24,27 @@ export default async function Page() {
         <div className="absolute inset-x-0 -top-1 h-2 bg-brand-gradient" />
         <div className="absolute inset-0 bg-radial-glow pointer-events-none" />
 
-        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight">
+        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
           <span className="text-brand-gradient">AI avatars</span> of your favourite stars
         </h1>
 
         <p className="mt-4 text-white/80 max-w-2xl">
-          Make AI videos of celebs doing amazing things, for your friends or with your products.
-          Whether it's your favourite celeb taking your supplements, or the hottest athlete wearing
-          your activewear — book here to unlock their permission on the Sora app
+          Create AI videos of public figures with their permission. Perfect for brand campaigns or just
+          for fun. Book through filmee to unlock their permission on the Sora app
         </p>
 
-        <div className="mt-6 flex items-center gap-3">
+        <div className="mt-6 flex flex-wrap items-center gap-3">
           <Link
             href="/creators"
-            className="rounded-full px-5 py-3 font-medium text-black bg-brand-gradient"
+            className="inline-flex items-center gap-2 rounded-full bg-brand-gradient px-5 py-3 text-base font-semibold text-white shadow-lg shadow-indigo-500/25 transition hover:-translate-y-0.5 hover:shadow-indigo-500/35 focus-ring"
           >
             Browse creators
           </Link>
           <Link
             href="/auth/signup"
-            className="rounded-full px-5 py-3 font-medium border-brand-gradient"
+            className="inline-flex items-center gap-2 rounded-full bg-brand-gradient px-5 py-3 text-base font-semibold text-white shadow-lg shadow-indigo-500/25 transition hover:-translate-y-0.5 hover:shadow-indigo-500/35 focus-ring"
           >
-            Get started
+            Creators: create your profile
           </Link>
         </div>
       </section>

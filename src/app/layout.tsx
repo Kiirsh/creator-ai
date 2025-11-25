@@ -3,9 +3,16 @@ import "./globals.css";
 import type { ReactNode } from "react";
 import SiteHeader from "@/components/SiteHeader";
 import { Toaster } from "sonner";
-import { Poppins } from "next/font/google";
+import { Inter, Poppins } from "next/font/google";
+import AppSidebar from "@/components/layout/AppSidebar";
 
-// Load Poppins Bold and expose as a CSS variable we can use anywhere
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans-base",
+  display: "swap",
+});
+
+// Poppins stays for the logo/brand moments
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["700"],
@@ -15,18 +22,25 @@ const poppins = Poppins({
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      {/* Add the font variable to body so components/pages can reference it */}
-      <body className={`bg-neutral-950 text-white ${poppins.variable}`}>
-        <SiteHeader />
-        {children}
-        {/* Toasts */}
-        <Toaster
-          theme="dark"
-          position="top-center"
-          richColors
-          closeButton
-          expand={false}
-        />
+      <body className={`${inter.variable} ${poppins.variable} min-h-screen bg-background text-foreground`}>
+        <div className="min-h-screen flex flex-col">
+          <SiteHeader />
+
+          <div className="flex flex-1 w-full">
+            <AppSidebar />
+            <main className="flex-1 px-4 md:px-8 py-8">
+              <div className="mx-auto w-full max-w-6xl space-y-8">{children}</div>
+            </main>
+          </div>
+
+          <Toaster
+            theme="light"
+            position="top-center"
+            richColors
+            closeButton
+            expand={false}
+          />
+        </div>
       </body>
     </html>
   );

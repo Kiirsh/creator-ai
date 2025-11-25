@@ -61,7 +61,7 @@ export default function EarningsPage() {
             fetchEarnings();
           }}
           disabled={loading}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+          className="px-4 py-2 rounded-full bg-primary text-primary-foreground font-semibold shadow-[0_12px_25px_rgba(79,70,229,0.35)] hover:brightness-110 disabled:opacity-50 border border-primary/60 transition focus-ring"
         >
           {loading ? "Refreshing..." : "Refresh"}
         </button>
@@ -73,15 +73,15 @@ export default function EarningsPage() {
         <Stat title="Your take-home" value={money(totals.net)} />
       </div>
 
-      <div className="rounded-2xl border border-white/10 bg-neutral-900 p-4">
-        <h2 className="text-lg font-semibold mb-3">Paid orders</h2>
+      <div className="dark-card rounded-2xl p-4">
+        <h2 className="text-lg font-semibold mb-3 text-white">Paid orders</h2>
         {loading ? (
-          <div className="text-white/70 text-sm">Loading…</div>
+          <div className="text-slate-100 text-sm">Loading…</div>
         ) : rows.length === 0 ? (
-          <div className="text-white/70 text-sm">No paid orders yet.</div>
+          <div className="text-slate-50 text-sm">No paid orders yet.</div>
         ) : (
           <table className="w-full text-sm">
-            <thead className="text-white/60">
+            <thead className="text-slate-100/90">
               <tr>
                 <th className="text-left py-2">Date</th>
                 <th className="text-left py-2">Rate</th>
@@ -90,7 +90,7 @@ export default function EarningsPage() {
                 <th className="text-right py-2">Net</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/10">
+            <tbody className="divide-y divide-white/10 text-slate-50">
               {rows.map((r) => (
                 <tr key={r.id}>
                   <td className="py-2">{new Date(r.created_at).toLocaleDateString()}</td>
@@ -112,9 +112,9 @@ export default function EarningsPage() {
 
 function Stat({ title, value }: { title: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-neutral-900 p-4">
-      <div className="text-white/60 text-sm">{title}</div>
-      <div className="text-xl font-semibold">{value}</div>
+    <div className="dark-card rounded-2xl p-4">
+      <div className="text-slate-100/90 text-sm">{title}</div>
+      <div className="text-xl font-semibold text-white">{value}</div>
     </div>
   );
 }

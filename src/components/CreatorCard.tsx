@@ -52,11 +52,11 @@ function SocialRow({
 }) {
   if (!handle) return null;
   return (
-    <div className="flex items-center gap-2 text-xs text-white/80">
+    <div className="flex items-center gap-2 text-xs text-white/90">
       <span className="shrink-0">{icon}</span>
       <span className="truncate">{handle}</span>
       {typeof followers === "number" && followers > 0 && (
-        <span className="text-white/50">· {followers.toLocaleString()}</span>
+        <span className="text-white/70">· {followers.toLocaleString()}</span>
       )}
     </div>
   );
@@ -91,7 +91,7 @@ export default function CreatorCard(props: CreatorCardProps) {
   return (
     <Link
       href={href}
-      className="block rounded-2xl border border-white/10 bg-neutral-900 hover:border-white/20 transition-colors p-4"
+      className="block rounded-2xl dark-card hover:border-primary/50 hover:shadow-[0_22px_60px_rgba(79,70,229,0.32)] transition-colors transition-shadow p-4"
     >
       {/* Top: avatar + name */}
       <div className="flex items-center gap-3">
@@ -105,20 +105,20 @@ export default function CreatorCard(props: CreatorCardProps) {
           style={{ width: 64, height: 64 }}
         />
         <div className="min-w-0">
-          <div className="font-semibold truncate">{name}</div>
-          <div className="text-sm text-white/60 truncate">
+          <div className="font-semibold truncate text-white">{name}</div>
+          <div className="text-sm text-slate-200/80 truncate">
             {role || "Creator"}
           </div>
         </div>
       </div>
 
       {/* Price / stats */}
-      <div className="mt-4 text-sm text-white/80">
-        <div className="font-medium">
+      <div className="mt-4 text-sm text-slate-100">
+        <div className="font-semibold text-white">
           From {money(baseRateCents || 0)}
         </div>
         {typeof followers === "number" && followers > 0 && (
-          <div className="text-white/50">{followers.toLocaleString()} followers</div>
+          <div className="text-slate-100/80">{followers.toLocaleString()} followers</div>
         )}
       </div>
 
@@ -127,7 +127,7 @@ export default function CreatorCard(props: CreatorCardProps) {
         youtubeHandle ||
         tiktokHandle ||
         soraHandle) && (
-        <div className="mt-4 space-y-1.5">
+        <div className="mt-4 space-y-1.5 text-slate-100">
           <SocialRow
             icon={<Instagram className="h-3.5 w-3.5" />}
             label="Instagram"
@@ -161,7 +161,7 @@ export default function CreatorCard(props: CreatorCardProps) {
           {categories.slice(0, 3).map((cat) => (
             <span
               key={cat}
-              className="text-[11px] rounded-full border border-white/10 px-2 py-0.5 text-white/70"
+              className="text-[11px] rounded-full border border-white/20 px-2 py-0.5 text-slate-50"
             >
               #{cat}
             </span>
@@ -170,28 +170,28 @@ export default function CreatorCard(props: CreatorCardProps) {
       )}
 
       {/* No-nos */}
-{noNos && noNos.length > 0 && (
-  <div className="mt-3 flex items-start gap-2">
-    <span className="shrink-0 text-[10px] uppercase tracking-wide text-white/50 pt-1">
-      No-nos
-    </span>
-    <div className="flex flex-wrap gap-1.5">
-      {noNos.slice(0, 4).map((tag) => (
-        <span
-          key={tag}
-          className="text-[11px] rounded-full bg-white/5 border border-white/10 px-2 py-0.5 text-white/70"
-        >
-          {tag}
-        </span>
-      ))}
-    </div>
-  </div>
-)}
+      {noNos && noNos.length > 0 && (
+        <div className="mt-3 flex items-start gap-2">
+          <span className="shrink-0 text-[10px] uppercase tracking-wide text-slate-50 pt-1">
+            No-nos
+          </span>
+          <div className="flex flex-wrap gap-1.5">
+            {noNos.slice(0, 4).map((tag) => (
+              <span
+                key={tag}
+                className="text-[11px] rounded-full bg-white/10 border border-white/25 px-2 py-0.5 text-slate-50"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
 
 
       {/* Rating (optional) */}
       {typeof rating === "number" && ratingCount ? (
-        <div className="mt-3 text-xs text-white/60">⭐ {rating.toFixed(1)} ({ratingCount})</div>
+        <div className="mt-3 text-xs text-slate-200/80">⭐ {rating.toFixed(1)} ({ratingCount})</div>
       ) : null}
     </Link>
   );
